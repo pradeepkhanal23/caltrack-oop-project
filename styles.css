@@ -1,0 +1,18 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;800&family=Quicksand:wght@500;600;700&family=Sen:wght@400;600;700;800&display=swap");
+
+:root {
+  --font-family: "Quicksand", "Montserrat", "Sen", sans-serif;
+  --box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-family);
+}
+
+.card {
+  height: 10rem;
+  border-radius: 0.5rem;
+  box-shadow: var(--box-shadow);
+}
