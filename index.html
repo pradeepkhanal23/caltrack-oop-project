@@ -166,7 +166,7 @@
                 type="button"
                 class="btn btn-success btn-sm"
                 data-bs-toggle="collapse"
-                data-bs-target="#add-meal"
+                data-bs-target="#meal-collapse"
               >
                 <span class="text-nowrap">
                   <i class="bi bi-plus"></i> Add Meal
@@ -174,13 +174,13 @@
               </button>
             </div>
             <div class="custom-collapse-wrapper pt-3">
-              <div class="collapse" id="add-meal">
-                <form>
+              <div class="collapse" id="meal-collapse">
+                <form id="meal-form">
                   <div class="mb-3">
                     <input
                       type="text"
                       class="form-control"
-                      id="meal-add"
+                      id="meal-name"
                       placeholder="Enter Meal or Item"
                     />
                   </div>
@@ -188,7 +188,7 @@
                     <input
                       type="number"
                       class="form-control"
-                      id="calorie-add"
+                      id="meal-calories"
                       placeholder="Enter Calories"
                     />
                   </div>
@@ -241,7 +241,7 @@
               <button
                 type="button"
                 class="btn btn-primary btn-sm"
-                data-bs-target="#add-workout"
+                data-bs-target="#workout-collapse"
                 data-bs-toggle="collapse"
               >
                 <span class="text-nowrap">
@@ -250,13 +250,13 @@
               </button>
             </div>
             <div class="custom-collapse-wrapper pt-3">
-              <div class="collapse" id="add-workout">
-                <form>
+              <div class="collapse" id="workout-collapse">
+                <form id="workout-form">
                   <div class="mb-3">
                     <input
                       type="text"
                       class="form-control"
-                      id="workout-add"
+                      id="workout-name"
                       placeholder="Enter Workout"
                     />
                   </div>
@@ -264,7 +264,7 @@
                     <input
                       type="number"
                       class="form-control"
-                      id="calorie-add"
+                      id="workout-calories"
                       placeholder="Enter Calories"
                     />
                   </div>

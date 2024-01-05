@@ -131,18 +131,49 @@ class Workout {
   }
 }
 
-const tracker = new CalorieTracker();
+/*Now that we need to make this a complete app, which has events and much more functionality, we create a new App class and add events in it*/
 
-const breakfast = new Meal("Morning Breakfast", 500);
-tracker.addMeal(breakfast);
+class App {
+  constructor() {
+    this._tracker = new CalorieTracker();
 
-const lunch = new Meal("KFC", 500);
-tracker.addMeal(lunch);
+    document
+      .querySelector("#meal-form")
+      .addEventListener("submit", this._newItem.bind(this, "meal"));
+    document
+      .querySelector("#workout-form")
+      .addEventListener("submit", this._newItem.bind(this, "workout"));
+  }
 
-const dinner = new Meal("MAccas", 1000);
-tracker.addMeal(dinner);
+  _newItem(type, e) {
+    e.preventDefault();
 
-const football = new Workout("football game", 400);
-tracker.addWorkout(football);
+    const name = document.getElementById(`${type}-name`);
+    const calories = document.getElementById(`${type}-calories`);
 
-console.log(tracker);
+    //input validation
+    if (name.value === "" || calories.value === "") {
+      alert("Please Enter both values");
+      return;
+    }
+
+    if (type === "meal") {
+      const newMeal = new Meal(name.value, Number(calories.value));
+      this._tracker.addMeal(newMeal);
+    } else {
+      const newWorkout = new Workout(name.value, Number(calories.value));
+      this._tracker.addWorkout(newWorkout);
+    }
+
+    name.value = "";
+    calories.value = "";
+
+    const collapseMealOrWorkout = document.getElementById(`${type}-collapse`);
+
+    const bootstrapCollapse = new bootstrap.Collapse(collapseMealOrWorkout, {
+      toggle: true,
+    });
+  }
+}
+
+const app = new App();
