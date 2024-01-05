@@ -1,7 +1,7 @@
 //Calorie Tracker Class
 class CalorieTracker {
   constructor() {
-    this._calorieLimit = 1900;
+    this._calorieLimit = 2000;
     this._totalCalories = 0;
     this._meals = [];
     this._workouts = [];
@@ -11,7 +11,7 @@ class CalorieTracker {
     this._displayCaloriesConsumed();
     this._displayCaloriesBurned();
     this._displayCaloriesRemaining();
-    this._displayProgressBar();
+    this._displayCaloriesProgress();
   }
 
   //   -----------------------Public Methods-------------------------------------
@@ -65,6 +65,7 @@ class CalorieTracker {
       "calories-remaining-card"
     );
     const caloriesGainLoss = document.getElementById("calories-gain-loss");
+    const progressBar = document.getElementById("progress");
 
     const remaining = this._calorieLimit - this._totalCalories;
 
@@ -74,18 +75,24 @@ class CalorieTracker {
 
       caloriesGainLoss.classList.remove("bg-success", "text-white");
       caloriesGainLoss.classList.add("bg-danger", "text-white");
+
+      progressBar.classList.remove("bg-success");
+      progressBar.classList.add("bg-danger");
     } else {
       caloriesRemainingCard.classList.add("bg-light", "text-dark");
       caloriesRemainingCard.classList.remove("bg-danger", "text-light");
 
       caloriesGainLoss.classList.add("bg-success", "text-light");
       caloriesGainLoss.classList.remove("bg-danger", "text-light");
+
+      progressBar.classList.remove("bg-danger");
+      progressBar.classList.add("bg-success");
     }
 
     caloriesRemainingEl.textContent = remaining;
   }
 
-  _displayProgressBar() {
+  _displayCaloriesProgress() {
     const progressBar = document.getElementById("progress");
 
     const limitCalories = this._calorieLimit;
@@ -97,14 +104,6 @@ class CalorieTracker {
 
     // Set the width of the progress bar
     progressBar.style.width = `${consumedPercentage}%`;
-
-    if (remainingCalories <= 0) {
-      progressBar.classList.remove("bg-success");
-      progressBar.classList.add("bg-danger");
-    } else {
-      progressBar.classList.remove("bg-danger");
-      progressBar.classList.add("bg-success");
-    }
   }
 
   _render() {
@@ -112,7 +111,7 @@ class CalorieTracker {
     this._displayCaloriesConsumed();
     this._displayCaloriesBurned();
     this._displayCaloriesRemaining();
-    this._displayProgressBar();
+    this._displayCaloriesProgress();
   }
 }
 
