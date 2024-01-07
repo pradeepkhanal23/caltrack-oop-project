@@ -19,15 +19,94 @@ class CalorieTracker {
   addMeal(meal) {
     this._meals.push(meal);
     this._totalCalories += meal.calories;
+    this._displayMealToTheDOM(meal);
     this._render();
   }
   addWorkout(workout) {
     this._workouts.push(workout);
     this._totalCalories -= workout.calories;
+    this._displayWorkoutToTheDOM(workout);
     this._render();
   }
 
   //   -----------------------Private Methods-------------------------------------
+
+  _deleteMealFromTheTracker(id) {
+    // the explanation is same as deleting the workout from the _deleteWorkoutFromTheTracker() function written below this function
+    const index = this._meals.findIndex((meal) => meal.id === id);
+
+    if (index !== -1) {
+      const meal = this._meals[index];
+      this._totalCalories -= meal.calories;
+      this._meals.splice(index, 1);
+      this._render();
+    }
+  }
+
+  _deleteWorkoutFromTheTracker(id) {
+    //once we get the ID of the specific meal object, we look out for the objects's index
+    /* findIndex() has been used instead of find() becasue find returns an actual element whereas findIndex return the index and we can perform additional array methods to manipulate the actual array, thats why we are using findIndex here*/
+    const index = this._workouts.findIndex((workout) => workout.id === id);
+
+    /*if this returns true,means its a match, otherwise the searching goes all the way to the end of the arrya which is -1, so we are making sure we have a match before we perform any operations*/
+    if (index !== -1) {
+      //which means we have a match
+
+      //we pulled the corresponsding workout object
+      const workout = this._workouts[index];
+
+      //we took off the calories since we are about to perform the delete operations and make sure the tracker total calories are up to date
+      this._totalCalories -= workout.calories;
+
+      //actually  took the object off the array based on its location and mutated the actual array
+      this._workouts.splice(index, 1);
+
+      //finally re-rendered the stats boxes to make a visual difference or UI manipulation
+      this._render();
+    }
+  }
+
+  _displayMealToTheDOM(meal) {
+    const mealsEl = document.getElementById("meals");
+    const div = document.createElement("div");
+    div.classList.add("p-2", "my-1", "meal-item");
+    div.setAttribute("data-id", meal.id);
+
+    div.innerHTML = `
+      <div
+                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize"
+                >
+                  ${meal.name}
+                  <div class="bg-success text-light py-1 px-2 rounded-2">
+                   ${meal.calories} Cal
+                  </div>
+                  <i class="bi bi-trash text-danger fs-4"></i>
+                </div>
+    `;
+
+    mealsEl.appendChild(div);
+  }
+
+  _displayWorkoutToTheDOM(workout) {
+    const workoutEl = document.getElementById("workouts");
+    const div = document.createElement("div");
+    div.classList.add("p-2", "my-1", "workout-item");
+    div.setAttribute("data-id", workout.id);
+
+    div.innerHTML = `
+      <div
+                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize"
+                >
+                  ${workout.name}
+                  <div class="bg-primary text-light py-1 px-2 rounded-2">
+                   ${workout.calories} Cal
+                  </div>
+                  <i class="bi bi-trash text-danger fs-4"></i>
+                </div>
+    `;
+
+    workoutEl.appendChild(div);
+  }
 
   _displayCaloriesTotal() {
     const totalCaloriesEl = document.getElementById("total-calories");
@@ -143,6 +222,14 @@ class App {
     document
       .querySelector("#workout-form")
       .addEventListener("submit", this._newItem.bind(this, "workout"));
+
+    document
+      .getElementById("meals")
+      .addEventListener("click", this._deleteItem.bind(this, "meal"));
+
+    document
+      .getElementById("workouts")
+      .addEventListener("click", this._deleteItem.bind(this, "workout"));
   }
 
   _newItem(type, e) {
@@ -170,9 +257,32 @@ class App {
 
     const collapseMealOrWorkout = document.getElementById(`${type}-collapse`);
 
+    //bootstrap inbuilt constructor that helps the collalspible element to toggle using Javascript, its found in the documentation
     const bootstrapCollapse = new bootstrap.Collapse(collapseMealOrWorkout, {
       toggle: true,
     });
+  }
+
+  _deleteItem(type, e) {
+    if (e.target.classList.contains("bi-trash")) {
+      if (confirm("Are you sure??")) {
+        /* because the id itself is not present in this targeted div, we look up for the closest div which has the class of meal-item because it has that specific attached meal-id based on which we perform our delete operation (we can inspect elements after the meal is aaded via form submission) */
+        const itemElement = e.target.closest(`${type}-item`);
+        if (itemElement) {
+          const itemId = itemElement.getAttribute("data-id");
+
+          // We need to add this logic in the CalorieTracker class
+          //based on the type, we are deleting eithe meal or workout
+          type === "meal"
+            ? this._tracker._deleteMealFromTheTracker(itemId)
+            : this._tracker._deleteWorkoutFromTheTracker(itemId);
+
+          // this Removes the item from the DOM but not from the tracker so , we have invoked _deleteMealFromTheTracker and _deleteWorkoutFromTheTracker to handle it
+          itemElement.remove();
+        }
+      }
+      return;
+    }
   }
 }
 

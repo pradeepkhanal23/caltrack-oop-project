@@ -129,22 +129,24 @@
 
     <!-- Progress Section -->
     <section class="p-2">
-      <div class="container">
-        <div class="progress" role="progress-bar ">
-          <div
-            class="progress-bar progress-bar-striped bg-success progress-bar-animated"
-            role="progressbar"
-            id="progress"
-          ></div>
+      <div class="custom-container">
+        <div class="container-fluid">
+          <div class="progress" role="progress-bar ">
+            <div
+              class="progress-bar progress-bar-striped bg-success progress-bar-animated"
+              role="progressbar"
+              id="progress"
+            ></div>
+          </div>
         </div>
       </div>
     </section>
 
     <!-- Meal Filter Input -->
-    <div class="section p-5">
+    <div class="section p-3 p-lg-5">
       <div class="container-fluid">
         <div class="row g-4">
-          <div class="col-md-6 bg-light p-3 rounded-3">
+          <div class="col-md-6 p-3 rounded-3">
             <div class="mb-3 text-center">
               <label
                 for="filter-meals"
@@ -173,9 +175,9 @@
                 </span>
               </button>
             </div>
-            <div class="custom-collapse-wrapper pt-3">
+            <div class="custom-collapse-wrapper bg-light mt-3">
               <div class="collapse" id="meal-collapse">
-                <form id="meal-form">
+                <form id="meal-form" class="p-3">
                   <div class="mb-3">
                     <input
                       type="text"
@@ -198,29 +200,23 @@
                 </form>
               </div>
             </div>
-            <ul class="list-group mt-4">
-              <li
-                class="list-group-item d-flex align-items-center justify-content-between fs-6"
-              >
-                Breakfast
-                <button type="button" class="btn btn-sm btn-success">
-                  350 Cal
-                </button>
-                <i class="bi bi-trash text-danger fs-4"></i>
-              </li>
-              <li
-                class="list-group-item d-flex align-items-center justify-content-between fs-6"
-              >
-                Lunch
-                <button type="button" class="btn btn-sm btn-success">
-                  620 Cal
-                </button>
-                <i class="bi bi-trash text-danger fs-4"></i>
-              </li>
-            </ul>
+
+            <div id="meals">
+              <!-- <div class="p-2 my-1 meal-item">
+                <div
+                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize"
+                >
+                  breakfast
+                  <div class="bg-success text-light py-1 px-2 rounded-2">
+                    350 Cal
+                  </div>
+                  <i class="bi bi-trash text-danger fs-4"></i>
+                </div>
+              </div> -->
+            </div>
           </div>
 
-          <div class="col-md-6 bg-light p-3 rounded-3">
+          <div class="col-md-6 p-3 rounded-3">
             <div class="mb-3 text-center">
               <label
                 for="filter-workouts"
@@ -249,9 +245,9 @@
                 </span>
               </button>
             </div>
-            <div class="custom-collapse-wrapper pt-3">
+            <div class="custom-collapse-wrapper bg-light mt-3">
               <div class="collapse" id="workout-collapse">
-                <form id="workout-form">
+                <form id="workout-form" class="p-3">
                   <div class="mb-3">
                     <input
                       type="text"
@@ -274,26 +270,19 @@
                 </form>
               </div>
             </div>
-            <ul class="list-group mt-4">
-              <li
-                class="list-group-item d-flex align-items-center justify-content-between fs-6"
-              >
-                Treadmill 1 Hour
-                <button type="button" class="btn btn-sm btn-primary">
-                  400 Cal
-                </button>
-                <i class="bi bi-trash text-danger fs-4"></i>
-              </li>
-              <li
-                class="list-group-item d-flex align-items-center justify-content-between fs-6"
-              >
-                Bike 90 Mins
-                <button type="button" class="btn btn-sm btn-primary">
-                  500 Cal
-                </button>
-                <i class="bi bi-trash text-danger fs-4"></i>
-              </li>
-            </ul>
+            <div id="workouts">
+              <!-- <div class="p-2 my-1 workout-item">
+                <div
+                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize"
+                >
+                  Pushups
+                  <div class="bg-primary text-light py-1 px-2 rounded-2">
+                    350 Cal
+                  </div>
+                  <i class="bi bi-trash text-danger fs-4"></i>
+                </div>
+              </div> -->
+            </div>
           </div>
         </div>
       </div>
