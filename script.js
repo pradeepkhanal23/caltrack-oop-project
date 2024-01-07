@@ -56,7 +56,7 @@ class CalorieTracker {
       const workout = this._workouts[index];
 
       //we took off the calories since we are about to perform the delete operations and make sure the tracker total calories are up to date
-      this._totalCalories -= workout.calories;
+      this._totalCalories += workout.calories;
 
       //actually  took the object off the array based on its location and mutated the actual array
       this._workouts.splice(index, 1);
@@ -267,7 +267,8 @@ class App {
     if (e.target.classList.contains("bi-trash")) {
       if (confirm("Are you sure??")) {
         /* because the id itself is not present in this targeted div, we look up for the closest div which has the class of meal-item because it has that specific attached meal-id based on which we perform our delete operation (we can inspect elements after the meal is aaded via form submission) */
-        const itemElement = e.target.closest(`${type}-item`);
+        const itemElement = e.target.closest(`.${type}-item`);
+
         if (itemElement) {
           const itemId = itemElement.getAttribute("data-id");
 
