@@ -17,13 +17,14 @@ body {
   font-family: var(--font-family);
 }
 
-.my-nav-classes {
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
 .navbar-brand-custom {
   font-size: 2rem;
   font-weight: bolder;
+  text-transform: uppercase;
+}
+
+form {
+  border: 1px solid rgba(128, 128, 128, 0.278);
 }
 
 .custom-container {

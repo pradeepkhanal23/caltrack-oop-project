@@ -1,10 +1,10 @@
 //Calorie Tracker Class
 class CalorieTracker {
   constructor() {
-    this._calorieLimit = 2000;
-    this._totalCalories = 0;
-    this._meals = [];
-    this._workouts = [];
+    this._calorieLimit = Storage.getCalorieLimit();
+    this._totalCalories = Storage.getTotalCalories();
+    this._meals = Storage.getMeals();
+    this._workouts = Storage.getWorkouts();
 
     this._displayCaloriesLimit();
     this._displayCaloriesTotal();
@@ -19,14 +19,44 @@ class CalorieTracker {
   addMeal(meal) {
     this._meals.push(meal);
     this._totalCalories += meal.calories;
+    Storage.updateTotalCalories(this._totalCalories);
+    Storage.saveMeal(meal);
     this._displayMealToTheDOM(meal);
     this._render();
   }
   addWorkout(workout) {
     this._workouts.push(workout);
     this._totalCalories -= workout.calories;
+    Storage.updateTotalCalories(this._totalCalories);
+    Storage.saveWorkout(workout);
     this._displayWorkoutToTheDOM(workout);
     this._render();
+  }
+
+  reset() {
+    this._totalCalories = 0;
+    this._meals = [];
+    this._workouts = [];
+    this._render();
+  }
+
+  setDailyLimit(calorieLimit) {
+    this._calorieLimit = calorieLimit;
+    Storage.setCalorieLimit(calorieLimit);
+    this._displayCaloriesLimit();
+    this._render();
+  }
+
+  loadItems() {
+    const meals = Storage.getMeals();
+    meals.forEach((meal) => {
+      return this._displayMealToTheDOM(meal);
+    });
+
+    const workouts = Storage.getWorkouts();
+    workouts.forEach((workout) => {
+      return this._displayWorkoutToTheDOM(workout);
+    });
   }
 
   //   -----------------------Private Methods-------------------------------------
@@ -38,7 +68,9 @@ class CalorieTracker {
     if (index !== -1) {
       const meal = this._meals[index];
       this._totalCalories -= meal.calories;
+      Storage.updateTotalCalories(this._totalCalories);
       this._meals.splice(index, 1);
+      Storage.removeMeal(id);
       this._render();
     }
   }
@@ -58,8 +90,14 @@ class CalorieTracker {
       //we took off the calories since we are about to perform the delete operations and make sure the tracker total calories are up to date
       this._totalCalories += workout.calories;
 
+      //updating the value in the Storage
+      Storage.updateTotalCalories(this._totalCalories);
+
       //actually  took the object off the array based on its location and mutated the actual array
       this._workouts.splice(index, 1);
+
+      //removing from the local Storage
+      Storage.removeWorkout(id);
 
       //finally re-rendered the stats boxes to make a visual difference or UI manipulation
       this._render();
@@ -74,9 +112,9 @@ class CalorieTracker {
 
     div.innerHTML = `
       <div
-                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize"
+                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize "
                 >
-                  ${meal.name}
+                <span>${meal.name}</span>
                   <div class="bg-success text-light py-1 px-2 rounded-2">
                    ${meal.calories} Cal
                   </div>
@@ -95,9 +133,9 @@ class CalorieTracker {
 
     div.innerHTML = `
       <div
-                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize"
+                  class="d-flex align-items-center justify-content-between fs-6 text-capitalize "
                 >
-                  ${workout.name}
+                  <span>${workout.name}</span>
                   <div class="bg-primary text-light py-1 px-2 rounded-2">
                    ${workout.calories} Cal
                   </div>
@@ -210,12 +248,109 @@ class Workout {
   }
 }
 
-/*Now that we need to make this a complete app, which has events and much more functionality, we create a new App class and add events in it*/
+class Storage {
+  static getCalorieLimit(defaultLimit = 2000) {
+    let calorieLimit;
 
+    if (localStorage.getItem("calorieLimit") === null) {
+      calorieLimit = defaultLimit;
+    } else {
+      calorieLimit = +localStorage.getItem("calorieLimit");
+    }
+
+    return calorieLimit;
+  }
+
+  static getTotalCalories(defaultCalorie = 0) {
+    let totalCalories;
+
+    if (localStorage.getItem("totalCalories") === null) {
+      totalCalories = defaultCalorie;
+    } else {
+      totalCalories = +localStorage.getItem("totalCalories");
+    }
+
+    return totalCalories;
+  }
+
+  static setCalorieLimit(calorieLimit) {
+    localStorage.setItem("calorieLimit", calorieLimit);
+  }
+
+  static updateTotalCalories(calories) {
+    localStorage.setItem("totalCalories", calories);
+  }
+
+  static getMeals() {
+    let meals;
+
+    if (localStorage.getItem("meals") === null) {
+      meals = [];
+    } else {
+      meals = JSON.parse(localStorage.getItem("meals"));
+    }
+
+    return meals;
+  }
+
+  static getWorkouts() {
+    let workouts;
+
+    if (localStorage.getItem("workouts") === null) {
+      workouts = [];
+    } else {
+      workouts = JSON.parse(localStorage.getItem("workouts"));
+    }
+
+    return workouts;
+  }
+
+  static saveMeal(meal) {
+    const meals = Storage.getMeals() || [];
+    meals.push(meal);
+    localStorage.setItem("meals", JSON.stringify(meals));
+  }
+
+  static removeMeal(id) {
+    const meals = Storage.getMeals();
+
+    meals.forEach((meal, i) => {
+      if (meal.id === id) {
+        meals.splice(i, 1);
+      }
+    });
+
+    localStorage.setItem("meals", JSON.stringify(meals));
+  }
+
+  static saveWorkout(workout) {
+    const workouts = Storage.getWorkouts() || [];
+    workouts.push(workout);
+    localStorage.setItem("workouts", JSON.stringify(workouts));
+  }
+
+  static removeWorkout(id) {
+    const workouts = Storage.getWorkouts();
+
+    workouts.forEach((meal, i) => {
+      if (meal.id === id) {
+        workouts.splice(i, 1);
+      }
+    });
+
+    localStorage.setItem("workouts", JSON.stringify(workouts));
+  }
+}
+
+/*Now that we need to make this a complete app, which has events and much more functionality, we create a new App class and add events in it*/
 class App {
   constructor() {
     this._tracker = new CalorieTracker();
+    this._tracker.loadItems();
+    this._loadEventListeners();
+  }
 
+  _loadEventListeners() {
     document
       .querySelector("#meal-form")
       .addEventListener("submit", this._newItem.bind(this, "meal"));
@@ -230,6 +365,21 @@ class App {
     document
       .getElementById("workouts")
       .addEventListener("click", this._deleteItem.bind(this, "workout"));
+
+    document
+      .getElementById("filter-meals")
+      .addEventListener("input", this._filterItem.bind(this, "meal"));
+    document
+      .getElementById("filter-workouts")
+      .addEventListener("input", this._filterItem.bind(this, "workout"));
+
+    document
+      .getElementById("reset-day")
+      .addEventListener("click", this._reset.bind(this));
+
+    document
+      .getElementById("modal-btn")
+      .addEventListener("click", this._setCalorie.bind(this));
   }
 
   _newItem(type, e) {
@@ -261,6 +411,49 @@ class App {
     const bootstrapCollapse = new bootstrap.Collapse(collapseMealOrWorkout, {
       toggle: true,
     });
+  }
+
+  _filterItem(type, e) {
+    const filterText = e.target.value.toLowerCase();
+
+    document.querySelectorAll(`.${type}-item`).forEach((item) => {
+      const text = item.firstElementChild.firstElementChild.textContent;
+
+      if (text.toLowerCase().includes(filterText)) {
+        item.style.display = "block";
+      } else {
+        item.style.display = "none";
+      }
+    });
+  }
+
+  _setCalorie(e) {
+    e.preventDefault();
+    const limit = document.getElementById("daily-calorie-limit");
+
+    if (limit.value === "") {
+      alert("Enter Limit Value");
+      return;
+    }
+
+    this._tracker.setDailyLimit(+limit.value);
+
+    limit.value = "";
+  }
+
+  _reset() {
+    if (confirm("Are you sure you want to reset ??")) {
+      // resetting from the tracker
+      this._tracker.reset();
+      document.getElementById("meals").innerHTML = "";
+      document.getElementById("workouts").innerHTML = "";
+
+      //deleting from the storage as well so that it doesnot come back on reload
+
+      //deleting from the DOM and also clearing the filter input field if any text is there
+      document.getElementById("filter-meals").value = "";
+      document.getElementById("filter-workouts").value = "";
+    }
   }
 
   _deleteItem(type, e) {
