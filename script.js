@@ -449,6 +449,9 @@ class App {
       document.getElementById("workouts").innerHTML = "";
 
       //deleting from the storage as well so that it doesnot come back on reload
+      localStorage.removeItem("meals");
+      localStorage.removeItem("workouts");
+      localStorage.removeItem("totalCalories");
 
       //deleting from the DOM and also clearing the filter input field if any text is there
       document.getElementById("filter-meals").value = "";
