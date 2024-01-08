@@ -40,6 +40,7 @@ class CalorieTracker {
     this._meals = [];
     this._workouts = [];
     this._render();
+    Storage.clearAll();
   }
 
   setDailyLimit(calorieLimit) {
@@ -342,6 +343,13 @@ class Storage {
 
     localStorage.setItem("workouts", JSON.stringify(workouts));
   }
+
+  static clearAll() {
+    //I want to keep the limit as it is so except that every other things are cleared
+    localStorage.removeItem("totalCalories");
+    localStorage.removeItem("meals");
+    localStorage.removeItem("workouts");
+  }
 }
 
 /*Now that we need to make this a complete app, which has events and much more functionality, we create a new App class and add events in it*/
@@ -449,11 +457,6 @@ class App {
       this._tracker.reset();
       document.getElementById("meals").innerHTML = "";
       document.getElementById("workouts").innerHTML = "";
-
-      //deleting from the storage as well so that it doesnot come back on reload
-      localStorage.removeItem("meals");
-      localStorage.removeItem("workouts");
-      localStorage.removeItem("totalCalories");
 
       //deleting from the DOM and also clearing the filter input field if any text is there
       document.getElementById("filter-meals").value = "";
