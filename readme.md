@@ -28,4 +28,4 @@ Inspiration for this project was drawn from traversy media Modern JS Course 2.0 
 
 ## License
 
-This project is licensed under the MIT License: LICENSE.
+This project is licensed under the MIT License.
