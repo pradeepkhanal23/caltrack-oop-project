@@ -2,6 +2,10 @@
 
 Welcome to the Calorie Tracker App! This application is designed to help users track their daily calorie intake and maintain a healthy lifestyle. The app is built using Object-Oriented Programming (OOP) principles in JavaScript, providing a modular and organized codebase.
 
+![Project Screenshoot](./images/project-screenshot.png)
+
+[Live Demo](https://qilo.netlify.app/)
+
 ## Features
 
 User-friendly Interface: Intuitive design for easy navigation and seamless user experience.
